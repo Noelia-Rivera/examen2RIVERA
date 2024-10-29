@@ -1,0 +1,95 @@
+<app-sidevar></app-sidevar>
+<div class="container table-responsive">
+    <div class="d-flex justify-content-between">
+        <h1>Tabla Libros</h1>
+        <button type="button" class="btn btn-outline-secondary bi bi-arrow-left-right" (click)="cambiarVista()"></button>
+    </div>
+    <div class="d-flex justify-content-center mb-2">
+        <button type="button" class="btn btn-success bi bi-plus" data-bs-toggle="modal" data-bs-target="#form" (click)="isUpdate=false"></button>
+    </div>
+    <table class="table" *ngIf="mostrarTabla">
+        <thead class="table-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">NOMBRE</th>
+            <th scope="col">ESTADO</th>
+            <th scope="col">FACULTAD</th>
+            <th scope="col">Acción</th>
+        </tr>
+        </thead>
+        <tbody class="table-group-divider">
+        <tr *ngFor="let carrera of carreras; let i = index">
+            <th scope="row">{{ i + 1 }}</th>
+            <!-- <td>{{seccion.idSeccion}}</td> -->
+            <td>{{carrera.nombre}}</td>
+            <td>{{carrera.estado}}</td>
+            <td>{{ carrera.id_facultad ? carrera.id_facultad.id_facultad : 'Sin categoría' }}</td>
+            <td>
+                <button type="button" class="btn btn-outline-success mx-2 bi bi-pencil-fill" (click)="selectCarrera(carrera)" data-bs-toggle="modal" data-bs-target="#form"></button>
+                <button type="button" class="btn btn-outline-danger bi bi-archive" (click)="eliminarCarrera(carrera.id_carrera)"></button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="container d-flex flex-wrap justify-content-center gap-4"  *ngIf="!mostrarTabla">
+    <div class="card" *ngFor="let carrera of carreras; let i = index" style="width: 18rem;">
+        <div class="card-header d-flex justify-content-center">
+            <h5>{{ i + 1 }}</h5>
+        </div>
+        <div class="d-flex flex-column">
+            <img src="assets/portada.jpeg" class="card-img-top align-self-center" alt="...">
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{carrera.nombre}}</h5>
+            <div class="d-flex flex-row gap-4">
+                <p>Estado: {{carrera.estado}}</p>
+            </div>
+            <div class="d-flex flex-row gap-4">
+                <p>Seccion: {{ carrera.id_facultad ? carrera.id_facultad.nombre : 'Sin categoría' }}</p>
+            </div>
+            <div>
+                <button type="button" class="btn btn-outline-success mx-2 bi bi-pencil-fill" (click)="selectCarrera(carrera)" data-bs-toggle="modal" data-bs-target="#form"></button>
+                <button type="button" class="btn btn-outline-danger bi bi-archive" (click)="eliminarCarrera(carrera.id_carrera)"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="form" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" *ngIf="!isUpdate">Agregar Carrera</h1>
+            <h1 class="modal-title fs-5" *ngIf="isUpdate">Actualizar Carrera</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="formCarrera"> 
+            <div class="mb-3">
+                <label for="titulo" class="col-form-label">Nombre:</label>
+                <input type="text" class="form-control" id="nombre" formControlName="nombre">
+            </div>
+            <div class="mb-3">
+                <label for="paginas" class="col-form-label">Estado</label>
+                <input type="text" class="form-control" id="estado" formControlName="estado">
+            </div>
+            <div class="mb-3">
+                <label for="facultad" class="form-label">Facultad:</label>
+                <select id="facultad" class="form-select" formControlName="id_facultad">
+                <option value="" disabled selected>Seleccione una opción</option>
+                <option *ngFor="let facultad of facultades" [value]="facultad.id_facultad">{{ facultad.nombre}}</option>
+                </select>
+            </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="resetFormCarrera()">Close</button>
+            <button type="button" class="btn btn-primary" (click)="crearCarrera()" *ngIf="!isUpdate" data-bs-dismiss="modal">Agregar</button>
+            <button type="button" class="btn btn-success" (click)="actualizarCarrera()" *ngIf="isUpdate" data-bs-dismiss="modal">Actualizar</button>
+        </div>
+        </div>
+    </div>
+</div>
