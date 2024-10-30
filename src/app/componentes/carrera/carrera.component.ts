@@ -22,6 +22,12 @@ export class CarreraComponent {
   formCarrera: FormGroup = new FormGroup({});
   mostrarTabla: boolean = true;
 
+
+  mostrarModal() {
+    this.isUpdate = false; // Si quieres abrir el modal para agregar una carrera
+    this.formCarrera.reset(); // Resetea el formulario si es necesario
+}
+
   cambiarVista(){
     this.mostrarTabla = !this.mostrarTabla;
   }
@@ -38,7 +44,7 @@ export class CarreraComponent {
       id_carrera: new FormControl(''),
       nombre: new FormControl(''),
       estado: new FormControl(''),
-      facultad:new FormControl('')
+      id_facultad:new FormControl('')
     });
   }
 
@@ -59,7 +65,7 @@ export class CarreraComponent {
         this.facultades = data;
       },
       (error) => {
-        console.error('Error al obtener las secciones', error);
+        console.error('Error al obtener las facultades', error);
       }
     );
   }
@@ -98,25 +104,25 @@ export class CarreraComponent {
 
   selectCarrera(carrera: any) {
     this.isUpdate = true;
-    this.formCarrera.controls['idLibro'].setValue(carrera.id_carrera);
-    this.formCarrera.controls['titulo'].setValue(carrera.nombre);
-    this.formCarrera.controls['paginas'].setValue(carrera.estado);
-    this.formCarrera.controls['idSeccion'].setValue(carrera.facultad.id_facultad);
+    this.formCarrera.controls['id_carrera'].setValue(carrera.id_carrera);
+    this.formCarrera.controls['nombre'].setValue(carrera.nombre);
+    this.formCarrera.controls['estado'].setValue(carrera.estado);
+    this.formCarrera.controls['id_facultad'].setValue(carrera.facultad.id_facultad);
   }
 
   actualizarCarrera() {
-    const nuevacarrera = {
-      id_carrera: this.formCarrera.value.idLibro,
-      nombre: this.formCarrera.value.titulo,
-      estado: this.formCarrera.value.paginas,
-      facultad: { id_facultad: this.formCarrera.value.id_facultad } as any
+    const carrera = {
+      id_carrera: this.formCarrera.value.id_carrera,
+      nombre: this.formCarrera.value.nombre,
+      estado: this.formCarrera.value.estado,
+      id_facultad: { id_facultad: this.formCarrera.value.id_facultad }
     } as any;
-    this.carreraService.actualizarCarrera(nuevacarrera).subscribe({
+    this.carreraService.actualizarCarrera(carrera).subscribe({
       next: (resp) => {
         if (resp) {
           Swal.fire({
             icon: 'success',
-            title: 'Libro actualizado',
+            title: 'Carrera actualizado',
             toast: true,
             position: 'top-end',
             showConfirmButton: false,

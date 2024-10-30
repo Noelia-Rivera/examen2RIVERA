@@ -22,8 +22,8 @@ export class CarreraService {
     return this.http.get<Carrera>(`${this.apiUrl}/${id_carrera}`);
   }
 
-  actualizarCarrera(carrera: Carrera):Observable<Carrera>{
-    return this.http.put<Carrera>(this.apiUrl, carrera);
+  actualizarCarrera(carrera: Carrera): Observable<Carrera> {
+    return this.http.put<Carrera>(`${this.apiUrl}/${carrera.id_carrera}`, carrera);
   }
 
   deleteCarrera(id_carrera:number){
